@@ -86,7 +86,6 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ItemView
 
     //추가=======================★
     private int UpdateCount(Content content){
-        //commit testtest
         int cnt =0;
         cnt = content.getCnt()+1;
         FirebaseDatabase pDatabase = FirebaseDatabase.getInstance();

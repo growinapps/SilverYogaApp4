@@ -11,10 +11,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SilverYogaApp">
-        <activity android:name=".YogaVideo"></activity>
+        <activity android:name=".Profile"></activity>
+        <activity android:name=".YogaVideo" />
         <activity android:name=".PartitionYoga" />
         <activity android:name=".FavoriteYoga" />
-        <activity android:name=".MainActivity2">
+        <activity android:name=".MainActivity2" />
+        <activity android:name=".Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,7 +26,7 @@
         <activity android:name=".ComsetSystem" />
         <activity android:name=".RankingYoga" />
         <activity android:name=".DetailYoga" />
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>
