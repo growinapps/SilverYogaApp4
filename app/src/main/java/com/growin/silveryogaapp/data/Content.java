@@ -2,6 +2,8 @@ package com.growin.silveryogaapp.data;
 
 import android.net.Uri;
 
+import java.io.Serializable;
+
 public class Content {
 
     private int imgId;

@@ -76,6 +76,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ItemView
                     updateCnt = UpdateCount(pItem);
                     contentsList.get(pos).setCnt(updateCnt);
 
+
                     Intent intent = new Intent(v.getContext(), YogaVideo.class);
                     v.getContext().startActivity(intent);
                 }

@@ -10,6 +10,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -41,9 +43,16 @@ public class FavoriteYoga extends BaseActivity {
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
+    private String pMail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
+        pMail = signInAccount.getEmail();
+
 
         bindViews();
         setupEvents();
@@ -70,9 +79,10 @@ public class FavoriteYoga extends BaseActivity {
         Log.d("DB 연결 : ", "시작!!!!");
         pDatabase = FirebaseDatabase.getInstance();
 
-        //수정=============★
+        //수정=============★ 
         pDatabaseRef = pDatabase.getReference("SilverYoga");
-        pQuery = pDatabaseRef.child("Contents").orderByChild("group").equalTo("어깨");
+        //pQuery = pDatabaseRef.child("Contents").orderByChild("group").equalTo("어깨"); //어깨관련동작쿼리
+        pQuery = pDatabaseRef.child("Favorit").orderByChild("mail").equalTo(pMail); //로그인 메일이 growinapps@gmail.com 일때 즐겨찾기 쿼리☆
 
 
         pStorage = FirebaseStorage.getInstance("gs://growinyoga-4f680.appspot.com");
@@ -96,8 +106,8 @@ public class FavoriteYoga extends BaseActivity {
 
                     //추가=======================★
                     int nIdx =  Integer.parseInt(ss.getKey());  //Key
-                    int nCnt = Integer.parseInt(ss.child("count").getValue().toString()); //Count
-                    String strGroup = ss.child("group").getValue().toString(); // ex) 허리, 어깨, 팔, 다리
+                    //int nCnt = Integer.parseInt(ss.child("count").getValue().toString()); //Count  Content에서만 쓰임☆
+                    //String strGroup = ss.child("group").getValue().toString(); // ex) 허리, 어깨, 팔, 다리  Content에서만 쓰임☆
                     Uri uriVedio = Uri.parse(ss.child("vedio").getValue().toString()); //요가영상 url
 
 
@@ -117,8 +127,8 @@ public class FavoriteYoga extends BaseActivity {
 
                             //추가=======================★
                             content.setIdx(nIdx);
-                            content.setCnt(nCnt);
-                            content.setGroup(strGroup);
+                            //content.setCnt(nCnt);  Content에서만 쓰임☆
+                            //content.setGroup(strGroup);  Content에서만 쓰임☆
                             content.setVedioUri(uriVedio);
                             contentList.add(content);
 

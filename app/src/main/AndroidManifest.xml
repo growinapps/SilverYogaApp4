@@ -15,8 +15,8 @@
         <activity android:name=".YogaVideo" />
         <activity android:name=".PartitionYoga" />
         <activity android:name=".FavoriteYoga" />
-        <activity android:name=".MainActivity2" />
-        <activity android:name=".Login">
+        <activity android:name=".Login" />
+        <activity android:name=".MainActivity2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

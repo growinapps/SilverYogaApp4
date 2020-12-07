@@ -4,10 +4,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.growin.silveryogaapp.data.Content;
 
 public class YogaVideo extends YouTubeBaseActivity {
 
@@ -16,11 +22,22 @@ public class YogaVideo extends YouTubeBaseActivity {
     YouTubePlayerView playerView;
     Button btn;
     YouTubePlayer.OnInitializedListener listener;
+    Content pItem; //☆
+    Button btnInsert;
+    Button btnDelete;
+    String pMail;
+    private FirebaseDatabase pDatabase;
+    private DatabaseReference pDatabaseRef;
+    private Query pQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_yoga_video);
+
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
+        pMail = signInAccount.getEmail();
+
 
         btn = findViewById(R.id.youtubeBtn);
         playerView = findViewById(R.id.youtubeView);
@@ -43,5 +60,24 @@ public class YogaVideo extends YouTubeBaseActivity {
                 playerView.initialize("아무키", listener);
             }
         });
+
+
+
+        //아직 작업중......☆
+        btnInsert = findViewById(R.id.btnInsert);
+        btnDelete = findViewById(R.id.btnDelete);
+
+        btnInsert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pDatabase = FirebaseDatabase.getInstance();
+
+                pDatabaseRef = pDatabase.getReference("SilverYoga");
+
+                //pQuery = pDatabaseRef.child("Favorit").orderByChild("mail").equalTo(pMail);
+                pQuery = pDatabaseRef.child("Favorit").orderByKey().limitToLast(1);
+            }
+        });
+
     }
 }
