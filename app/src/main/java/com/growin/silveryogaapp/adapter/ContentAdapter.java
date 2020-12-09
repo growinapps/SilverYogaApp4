@@ -76,7 +76,6 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ItemView
                     updateCnt = UpdateCount(pItem);
                     contentsList.get(pos).setCnt(updateCnt);
 
-
                     Intent intent = new Intent(v.getContext(), YogaVideo.class);
                     intent.putExtra("imgPath", pItem.getImgPath());
                     intent.putExtra("poseName", pItem.getTitle());

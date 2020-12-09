@@ -90,6 +90,8 @@ public class DetailYoga extends BaseActivity {
                     String strPoseName = ss.child("name").getValue().toString();
                     String strImgPath = ss.child("img").getValue().toString();
                     String strVideoId = ss.child("video").getValue().toString();
+                    int intCnt = Integer.parseInt(ss.child("count").getValue().toString());
+                    int intIdx = Integer.parseInt(ss.getKey());
 
                     Log.d("요가 동작 : ", strPoseName);
                     Log.d("이미지 URI : ", strImgPath);
@@ -106,6 +108,8 @@ public class DetailYoga extends BaseActivity {
                             content.setImgPath(strImgPath);
                             content.setTitle(strPoseName);
                             content.setVideoId(strVideoId);
+                            content.setCnt(intCnt);
+                            content.setIdx(intIdx);
 
                             contentList.add(content);
 
