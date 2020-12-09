@@ -40,7 +40,9 @@ public class Content {
     private int idx;
     private int cnt;
     private String group;
-    private Uri vedioUri;
+    private String videoId;
+    //추가☆
+    private String imgPath;
 
     public int getIdx() {
         return idx;
@@ -66,11 +68,20 @@ public class Content {
         this.group = group;
     }
 
-    public Uri getVedioUri() {
-        return vedioUri;
+    public String getVideoId() {
+        return videoId;
     }
 
-    public void setVedioUri(Uri vedioUri) {
-        this.vedioUri = vedioUri;
+    public void setVideoId(String vedioId) {
+        this.videoId = vedioId;
     }
+
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
+    }
+
 }

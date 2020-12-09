@@ -52,8 +52,6 @@ public class FavoriteYoga extends BaseActivity {
 
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
         pMail = signInAccount.getEmail();
-
-
         bindViews();
         setupEvents();
         setValues();
@@ -79,7 +77,7 @@ public class FavoriteYoga extends BaseActivity {
         Log.d("DB 연결 : ", "시작!!!!");
         pDatabase = FirebaseDatabase.getInstance();
 
-        //수정=============★ 
+        //수정=============★
         pDatabaseRef = pDatabase.getReference("SilverYoga");
         //pQuery = pDatabaseRef.child("Contents").orderByChild("group").equalTo("어깨"); //어깨관련동작쿼리
         pQuery = pDatabaseRef.child("Favorit").orderByChild("mail").equalTo(pMail); //로그인 메일이 growinapps@gmail.com 일때 즐겨찾기 쿼리☆
@@ -100,15 +98,14 @@ public class FavoriteYoga extends BaseActivity {
 
                 for (DataSnapshot ss : snapshot.getChildren()) {
 
-
                     String strPoseName = ss.child("name").getValue().toString();
                     String strImgPath = ss.child("img").getValue().toString();
 
                     //추가=======================★
-                    int nIdx =  Integer.parseInt(ss.getKey());  //Key
+                    //int nIdx =  Integer.parseInt(ss.getKey());  //Key
                     //int nCnt = Integer.parseInt(ss.child("count").getValue().toString()); //Count  Content에서만 쓰임☆
                     //String strGroup = ss.child("group").getValue().toString(); // ex) 허리, 어깨, 팔, 다리  Content에서만 쓰임☆
-                    Uri uriVedio = Uri.parse(ss.child("vedio").getValue().toString()); //요가영상 url
+                    String strVideo = ss.child("video").getValue().toString(); //요가영상 VideoId
 
 
                     Log.d("요가 동작 : ", strPoseName);
@@ -126,10 +123,10 @@ public class FavoriteYoga extends BaseActivity {
                             content.setTitle(strPoseName);
 
                             //추가=======================★
-                            content.setIdx(nIdx);
+                            //content.setIdx(nIdx);
                             //content.setCnt(nCnt);  Content에서만 쓰임☆
                             //content.setGroup(strGroup);  Content에서만 쓰임☆
-                            content.setVedioUri(uriVedio);
+                            content.setVideoId(strVideo);
                             contentList.add(content);
 
                             adapter = new ContentAdapter(contentList, mContext);

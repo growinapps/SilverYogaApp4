@@ -78,6 +78,9 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ItemView
 
 
                     Intent intent = new Intent(v.getContext(), YogaVideo.class);
+                    intent.putExtra("imgPath", pItem.getImgPath());
+                    intent.putExtra("poseName", pItem.getTitle());
+                    intent.putExtra("videoId", pItem.getVideoId());
                     v.getContext().startActivity(intent);
                 }
             });

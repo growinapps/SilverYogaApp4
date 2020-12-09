@@ -16,6 +16,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -31,6 +32,7 @@ public class DetailYoga extends BaseActivity {
 
     private FirebaseDatabase pDatabase;
     private DatabaseReference pDatabaseRef;
+    private Query pQuery;
 
     private FirebaseStorage pStorage;
     private StorageReference pStorageRef;
@@ -69,14 +71,16 @@ public class DetailYoga extends BaseActivity {
 
         Log.d("DB 연결 : ", "시작!!!!");
         pDatabase = FirebaseDatabase.getInstance();
-        pDatabaseRef = pDatabase.getReference("SilverYoga").child("Body").child("Shoulder");
+
+        pDatabaseRef = pDatabase.getReference("SilverYoga");
+        pQuery = pDatabaseRef.child("Contents").orderByChild("group"); //어깨관련동작쿼리
 
         pStorage = FirebaseStorage.getInstance("gs://growinyoga-4f680.appspot.com");
         layoutManager = new LinearLayoutManager(this.mContext);
         act.detailList.setLayoutManager(layoutManager);
         contentList = new ArrayList<>();
 
-        pDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        pQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -85,6 +89,7 @@ public class DetailYoga extends BaseActivity {
                 for (DataSnapshot ss : snapshot.getChildren()) {
                     String strPoseName = ss.child("name").getValue().toString();
                     String strImgPath = ss.child("img").getValue().toString();
+                    String strVideoId = ss.child("video").getValue().toString();
 
                     Log.d("요가 동작 : ", strPoseName);
                     Log.d("이미지 URI : ", strImgPath);
@@ -98,7 +103,9 @@ public class DetailYoga extends BaseActivity {
 
                             Content content = new Content();
                             content.setImgUri(uri);
+                            content.setImgPath(strImgPath);
                             content.setTitle(strPoseName);
+                            content.setVideoId(strVideoId);
 
                             contentList.add(content);
 
