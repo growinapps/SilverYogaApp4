@@ -93,7 +93,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ItemView
         cnt = content.getCnt()+1;
         FirebaseDatabase pDatabase = FirebaseDatabase.getInstance();
         DatabaseReference pDatabaseRef = pDatabase.getReference("SilverYoga");
-        pDatabaseRef.child("Contents").child(String.valueOf(content.getIdx())).child("count").setValue(String.valueOf(cnt));
+        pDatabaseRef.child("Contents").child(String.valueOf(content.getIdx())).child("count").setValue(Integer.valueOf(cnt));
 
         return cnt;
     }

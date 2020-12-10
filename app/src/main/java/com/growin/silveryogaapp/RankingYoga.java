@@ -24,6 +24,7 @@ import com.growin.silveryogaapp.data.Content;
 import com.growin.silveryogaapp.databinding.ActivityRankingYogaBinding;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class RankingYoga extends BaseActivity {
 
@@ -47,6 +48,7 @@ public class RankingYoga extends BaseActivity {
         bindViews();
         setupEvents();
         setValues();
+
     }
 
     @Override
@@ -68,8 +70,7 @@ public class RankingYoga extends BaseActivity {
         Log.d("DB 연결 : ", "시작!!!!");
         pDatabase = FirebaseDatabase.getInstance();
         pDatabaseRef = pDatabase.getReference("SilverYoga");
-        //pQuery = pDatabaseRef.child("Contents").orderByChild("count");
-        pQuery = pDatabaseRef.child("Contents").orderByValue();
+        pQuery = pDatabaseRef.child("Contents").orderByChild("count");// Sorting 쿼리☆
 
         pStorage = FirebaseStorage.getInstance("gs://growinyoga-4f680.appspot.com");
         layoutManager = new LinearLayoutManager(this.mContext);
@@ -85,12 +86,21 @@ public class RankingYoga extends BaseActivity {
                 for (DataSnapshot ss : snapshot.getChildren()) {
                     String strPoseName = ss.child("name").getValue().toString();
                     String strImgPath = ss.child("img").getValue().toString();
+                    int nCnt = Integer.parseInt(ss.child("count").getValue().toString());
 
                     Log.d("요가 동작 : ", strPoseName);
                     Log.d("이미지 URI : ", strImgPath);
+                    Log.d("COUNT : ", ss.child("count").getValue().toString());  //카운트 수☆
 
+                    Content content = new Content();
+                    content.setTitle(strPoseName);
+                    content.setCnt(nCnt);
+                    content.setImgPath(strImgPath);
+                    contentList.add(content);
+
+                    /*
+                    //==============================================================================
                     pStorageRef = pStorage.getReference(strImgPath);
-
                     pStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
@@ -101,7 +111,6 @@ public class RankingYoga extends BaseActivity {
                             content.setTitle(strPoseName);
 
                             contentList.add(content);
-
                             adapter = new ContentAdapter(contentList, mContext);
                             act.rankingList.setAdapter(adapter);
                         }
@@ -111,9 +120,32 @@ public class RankingYoga extends BaseActivity {
                             Log.d("Fail : ", "실패!!!");
                         }
                     });
+                    //==============================================================================
+                     */
                 }
 
-//                adapter.notifyDataSetChanged();
+
+                Collections.reverse(contentList);
+                for (Content con : contentList) {
+                    GetImgUri(con.getImgPath(), new IStorage() {
+                        @Override
+                        public void onCallBackImgUri(Uri uriImg) {
+                            con.setImgUri(uriImg);
+                            adapter = new ContentAdapter(contentList, mContext);
+                            act.rankingList.setAdapter(adapter);
+                        }
+                    });
+                }
+
+
+
+
+
+
+                //adapter = new ContentAdapter(contentList, mContext);
+                //act.rankingList.setAdapter(adapter);
+
+                //adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -121,7 +153,6 @@ public class RankingYoga extends BaseActivity {
                 Log.d("DB 연결 Fail : ", "실패!!!");
             }
         });
-
     }
 
     @Override
@@ -130,4 +161,25 @@ public class RankingYoga extends BaseActivity {
         act = DataBindingUtil.setContentView(this, R.layout.activity_ranking_yoga);
 
     }
+
+    public void GetImgUri(String strImgPath, IStorage iStorage){
+
+        pStorageRef = pStorage.getReference(strImgPath);
+        pStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                iStorage.onCallBackImgUri(uri);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("Fail : ", "실패!!!");
+                iStorage.onCallBackImgUri(null
+                );
+            }
+        });
+
+    }
+
+
 }
